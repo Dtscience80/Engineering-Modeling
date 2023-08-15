@@ -18,6 +18,7 @@ def preprocessing():
                 df = pd.read_csv(file_pro,  sep=';')
             else:
                 df = pd.read_excel(file_pro)
+            df = df.dropna()
         except Exception as e:
             st.error(f"Error: Unable to read the file. Please make sure it's a valid Excel or CSV file. Exception: {e}")
             st.stop()
