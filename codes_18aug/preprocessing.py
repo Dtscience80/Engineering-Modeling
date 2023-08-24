@@ -10,6 +10,10 @@ import numpy as np
 
 def preprocessing():
     # File uploader
+    st.markdown(' ##### Pilih Delimiter (separator) file yang dipakai ! ')
+    delimiter = st.selectbox('Tentukan Delimiter file tabel anda !', (';', ',', ':', '.', '/', '|', '+'))
+    st.write('Delimiter file tabel anda \'', delimiter + '\'')
+    
     file_pro = st.file_uploader(
         "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"]
     )
@@ -18,9 +22,11 @@ def preprocessing():
     if file_pro is not None:
         try:
             if file_pro.name.endswith(".csv"):
-                df = pd.read_csv(file_pro, sep=";")
+                df = pd.read_csv(file, sep=delimiter, engine='python')
             else:
                 df = pd.read_excel(file_pro)
+            st.write("File uploaded:", file_pro.name)
+            df = df.dropna()
         except Exception as e:
             st.error(
                 f"Error: Unable to read the file. Please make sure it's a valid Excel or CSV file. Exception: {e}"
