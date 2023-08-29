@@ -153,9 +153,9 @@ def gpr_model2():
     )
 
     uploaded_file = st.file_uploader(
-        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"]
+        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"],key = "Upload2"
     )
-    display_button = st.button("Display Dataset")
+    display_button = st.button("Display Dataset", key = "button2")
 
     if uploaded_file is not None:
         try:
@@ -180,11 +180,11 @@ def gpr_model2():
         opsi = ["Ya", "Tidak"]
         columns = df.columns
 
-        opsi_urutkan = st.radio("Apakah data akan diurutkan?", opsi)
+        opsi_urutkan = st.radio("Apakah data akan diurutkan?", opsi, key = "radio1")
 
         if opsi_urutkan == "Ya":
             # Tambahkan teks input ke dalam list sesuai dengan input_nfeatures
-            label = st.selectbox("Data akan diurutkan berdasarkan fitur:", columns)
+            label = st.selectbox("Data akan diurutkan berdasarkan fitur:", columns, key ="select2")
             df = df.sort_values(by=[label])
 
         st.write(df)
@@ -199,7 +199,7 @@ def gpr_model2():
 
         # Tambahkan teks input ke dalam list sesuai dengan input_nfeatures
         for i in range(input_nfeatures):
-            selected_option = st.selectbox(f"Feature Input{i+1}:", columns)
+            selected_option = st.selectbox(f"Feature Input{i+1}:", columns, key = "select3")
             features_input.append(selected_option)
 
         output_nfeatures = st.number_input(
@@ -224,10 +224,10 @@ def gpr_model2():
             y[:, 1] = 0.6 * X[:, 0] + 0.2 * X[:, 1]
             # Create a checkbox
             st.write("Pilih kernel yang ingin digunakan :")
-            checkbox_rbf = st.checkbox("Radial Basis Function (RBF) Kernel")
-            checkbox_matern = st.checkbox("Matérn Kernel")
-            checkbox_rational = st.checkbox("Rational quadratic kernel")
-            checkbox_exp = st.checkbox("Exp-Sine-Squared kernel")
+            checkbox_rbf = st.checkbox("Radial Basis Function (RBF) Kernel", key= "cek")
+            checkbox_matern = st.checkbox("Matérn Kernel", key = "cek1")
+            checkbox_rational = st.checkbox("Rational quadratic kernel",key = "cek2")
+            checkbox_exp = st.checkbox("Exp-Sine-Squared kernel", key= "cek3")
 
             hasil_data_1 = {}
             hasil_data_2 = {}
@@ -243,10 +243,10 @@ def gpr_model2():
                 )
                 col1, col2 = st.columns(2)
                 with col1:
-                    min_length_scale_rbf = st.number_input("Nilai minimal length scale:")
+                    min_length_scale_rbf = st.number_input("Nilai minimal length scale:", key = "num")
 
                 with col2:
-                    max_length_scale_rbf = st.number_input("Nilai maksimal length scale:")
+                    max_length_scale_rbf = st.number_input("Nilai maksimal length scale:", key = "num1")
 
                 st.markdown(
                     "<h5>White Kernel Hyperparameter</h5>",
@@ -254,10 +254,10 @@ def gpr_model2():
                 )
                 col1, col2 = st.columns(2)
                 with col1:
-                    min_noise_rbf = st.number_input("Nilai minimal noise level")
+                    min_noise_rbf = st.number_input("Nilai minimal noise level", key= "num3")
 
                 with col2:
-                    max_noise_rbf = st.number_input("Nilai maksimal noise level")
+                    max_noise_rbf = st.number_input("Nilai maksimal noise level", key= "num4")
 
                 st.markdown(
                     "<h5>GPR Hyperparameter</h5>",
@@ -265,10 +265,10 @@ def gpr_model2():
                 )
                 col1, col2 = st.columns(2)
                 with col1:
-                    min_alpha_rbf = st.number_input("Nilai minimal regularization:")
+                    min_alpha_rbf = st.number_input("Nilai minimal regularization:", key= "num5")
 
                 with col2:
-                    max_alpha_rbf = st.number_input("Nilai maksimal regularization:")
+                    max_alpha_rbf = st.number_input("Nilai maksimal regularization:", key= "num6")
 
                 # Define the hyperparameter space for Bayesian optimization
                 space_rbf = [
@@ -280,7 +280,7 @@ def gpr_model2():
                     (min_alpha_rbf, max_alpha_rbf),  # Range for regularization
                 ]
 
-                testSize = st.number_input("Masukkan test size:")
+                testSize = st.number_input("Masukkan test size:", key= "num7")
 
                 if testSize != 0:
                     X_train, X_val, y_train, y_val = train_test_split(
@@ -515,7 +515,7 @@ def gpr_model2():
                     )
 
         
-        if st.button("Next"):
+        if st.button("Next",key = "key22"):
             for key in hasil_data_1:
                 if key == "rbf":
                     st.subheader("HASIL RBF KERNEL")

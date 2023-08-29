@@ -21,18 +21,23 @@ def predict_mlp():
 
     nama_data = st.text_input("Masukkan nama data : ")
     # File uploader
-    # File uploader
+    st.markdown(' ##### Pilih Delimiter (separator) file yang dipakai ! ')
+    delimiter = st.selectbox('Tentukan Delimiter file tabel anda !', (',', ';', ':', '.', '/', '|', '+'), key="delimit")
+    st.write('Delimiter file tabel anda \'', delimiter + '\'')
+
     file_pro = st.file_uploader(
-        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"]
+        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"], key="file_1"
     )
     display = st.button("Display Dataset")
 
     if file_pro is not None:
         try:
             if file_pro.name.endswith(".csv"):
-                df = pd.read_csv(file_pro, sep=";")
+                df = pd.read_csv(file_pro, sep=delimiter, engine='python')
             else:
                 df = pd.read_excel(file_pro)
+            st.write("File uploaded:", file_pro.name)
+            df = df.dropna()   
         except Exception as e:
             st.error(
                 f"Error: Unable to read the file. Please make sure it's a valid Excel or CSV file. Exception: {e}"
@@ -45,7 +50,7 @@ def predict_mlp():
         st.write(df)
 
     # File uploader widget
-    uploaded_model = st.file_uploader("Upload model dalam format H5 file", type=["h5"])
+    uploaded_model = st.file_uploader("Upload model dalam format H5 file", type=["h5"], key="file_2")
 
     if uploaded_model is not None:
         st.write("File uploaded successfully!")
@@ -84,12 +89,12 @@ def predict_mlp():
 
         # Tambahkan teks input ke dalam list sesuai dengan input_nfeatures
         for i in range(input_nfeatures):
-            selected_option = st.selectbox(f"Feature {i+1}:", options)
+            selected_option = st.selectbox(f"Feature {i+1}:", options, key="fitur")
             features_input.append(selected_option)
 
         feature_output = st.selectbox(
             "Masukkan feature output pada dataset yang akan dilakukan prediksi :",
-            options,
+            options, key="fitur_out"
         )
 
         data = {}

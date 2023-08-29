@@ -31,6 +31,10 @@ def plot_gpr(new_X_pred, new_y_pred, y_std, input, output):
 def predict_gpr():
     # File uploader
     nama_data = st.text_input("Masukkan nama data : ")
+    st.markdown(' ##### Pilih Delimiter (separator) file yang dipakai ! ')
+    delimiter = st.selectbox('Tentukan Delimiter file tabel anda !', (',', ';', ':', '.', '/', '|', '+'), key = "se_dem")
+    st.write('Delimiter file tabel anda \'', delimiter + '\'')
+    
     uploaded_file = st.file_uploader(
         "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"]
     )
@@ -39,9 +43,11 @@ def predict_gpr():
     if uploaded_file is not None:
         try:
             if uploaded_file.name.endswith(".csv"):
-                df = pd.read_csv(uploaded_file, sep=";")
+                df = pd.read_csv(uploaded_file, sep=delimiter, engine='python')
             else:
                 df = pd.read_excel(uploaded_file)
+            st.write("File uploaded:", uploaded_file.name)
+            df = df.dropna()
         except Exception as e:
             st.error(
                 f"Error: Unable to read the file. Please make sure it's a valid Excel or CSV file. Exception: {e}"

@@ -188,18 +188,23 @@ def gpr_model():
         "<h5 style='text-align : center;'>Optimasi Hyperparameter (Bayesian Optimization) dan Modelling dengan Gaussian Process Regression (GPR)</h5>",
         unsafe_allow_html=True,
     )
+    st.markdown(' ##### Pilih Delimiter (separator) file yang dipakai ! ')
+    delimiter = st.selectbox('Tentukan Delimiter file tabel anda !', (',', ';', ':', '.', '/', '|', '+'), key="delimit1")
+    st.write('Delimiter file tabel anda \'', delimiter + '\'')
 
     uploaded_file = st.file_uploader(
-        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"]
+        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"], key = "Upload1"
     )
-    display_button = st.button("Display Dataset")
+    display_button = st.button("Display Dataset",key = "Button1")
 
     if uploaded_file is not None:
         try:
             if uploaded_file.name.endswith(".csv"):
-                df = pd.read_csv(uploaded_file, sep=";")
+                df = pd.read_csv(uploaded_file, sep=delimiter, engine='python')
             else:
                 df = pd.read_excel(uploaded_file)
+            st.write("File uploaded:", uploaded_file.name)
+            df = df.dropna()
         except Exception as e:
             st.error(
                 f"Error: Unable to read the file. Please make sure it's a valid Excel or CSV file. Exception: {e}"
@@ -216,18 +221,18 @@ def gpr_model():
         opsi = ["Ya", "Tidak"]
         columns = df.columns
 
-        opsi_urutkan = st.radio("Apakah data akan diurutkan?", opsi)
+        opsi_urutkan = st.radio("Apakah data akan diurutkan?", opsi, key = "radio1")
 
         if opsi_urutkan == "Ya":
             # Tambahkan teks input ke dalam list sesuai dengan input_nfeatures
-            label = st.selectbox("Data akan diurutkan berdasarkan fitur:", columns)
+            label = st.selectbox("Data akan diurutkan berdasarkan fitur:", columns,key = "key24")
             df = df.sort_values(by=[label])
 
         st.write(df)
         st.subheader("INPUTKAN DATA YANG AKAN DIPREDIKSI (input/output) :")
-        input = st.selectbox("Masukkan data X:", columns)
+        input = st.selectbox("Masukkan data X:", columns,key = "key25")
         X = df[input].values.reshape(-1, 1)
-        output = st.selectbox("Masukkan data y:", columns)
+        output = st.selectbox("Masukkan data y:", columns,key = "key26")
         y = df[output].values.reshape(-1, 1)
 
         # Show plot data
@@ -236,10 +241,10 @@ def gpr_model():
         
         st.write("Pilih kernel yang ingin digunakan :")
         # Create a checkbox
-        checkbox_rbf = st.checkbox("Radial Basis Function (RBF) Kernel")
-        checkbox_matern = st.checkbox("Matérn Kernel")
-        checkbox_rational = st.checkbox("Rational quadratic kernel")
-        checkbox_exp = st.checkbox("Exp-Sine-Squared kernel")
+        checkbox_rbf = st.checkbox("Radial Basis Function (RBF) Kernel",key = "key27")
+        checkbox_matern = st.checkbox("Matérn Kernel",key = "key28")
+        checkbox_rational = st.checkbox("Rational quadratic kernel",key = "key29")
+        checkbox_exp = st.checkbox("Exp-Sine-Squared kernel",key = "key30")
 
         hasil_data = {}
 
@@ -253,10 +258,10 @@ def gpr_model():
             )
             col1, col2 = st.columns(2)
             with col1:
-                min_length_scale_rbf = st.number_input("Nilai minimal length scale:")
+                min_length_scale_rbf = st.number_input("Nilai minimal length scale:",key = "key31")
 
             with col2:
-                max_length_scale_rbf = st.number_input("Nilai maksimal length scale:")
+                max_length_scale_rbf = st.number_input("Nilai maksimal length scale:",key = "key32")
 
             st.markdown(
                 "<h5>White Kernel Hyperparameter</h5>",
@@ -264,10 +269,10 @@ def gpr_model():
             )
             col1, col2 = st.columns(2)
             with col1:
-                min_noise_rbf = st.number_input("Nilai minimal noise level")
+                min_noise_rbf = st.number_input("Nilai minimal noise level",key = "key33")
 
             with col2:
-                max_noise_rbf = st.number_input("Nilai maksimal noise level")
+                max_noise_rbf = st.number_input("Nilai maksimal noise level",key = "key34")
 
             st.markdown(
                 "<h5>GPR Hyperparameter</h5>",
@@ -275,10 +280,10 @@ def gpr_model():
             )
             col1, col2 = st.columns(2)
             with col1:
-                min_alpha_rbf = st.number_input("Nilai minimal regularization:")
+                min_alpha_rbf = st.number_input("Nilai minimal regularization:",key = "key35")
 
             with col2:
-                max_alpha_rbf = st.number_input("Nilai maksimal regularization:")
+                max_alpha_rbf = st.number_input("Nilai maksimal regularization:",key = "key36")
 
             # Define the hyperparameter space for Bayesian optimization
             space_rbf = [
@@ -290,7 +295,7 @@ def gpr_model():
                 (min_alpha_rbf, max_alpha_rbf),  # Range for regularization
             ]
 
-            testSize = st.number_input("Masukkan test size:")
+            testSize = st.number_input("Masukkan test size:",key = "key36")
 
             if testSize != 0:
                 X_train, X_val, y_train, y_val = train_test_split(

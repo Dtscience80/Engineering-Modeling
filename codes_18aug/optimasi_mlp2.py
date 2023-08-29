@@ -195,24 +195,17 @@ def print_model_summary(model):
 
 def optimasi_func():
     # File uploader
-
-    st.markdown(' ##### Pilih Delimiter (separator) file yang dipakai ! ')
-    delimiter = st.selectbox('Tentukan Delimiter file tabel anda !', (',', ';', ':', '.', '/', '|', '+'), key="delimit")
-    st.write('Delimiter file tabel anda \'', delimiter + '\'')
-
     uploaded_file = st.file_uploader(
-        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"], key = "upload3"
+        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"]
     )
     display_button = st.button("Display Dataset")
 
     if uploaded_file is not None:
         try:
             if uploaded_file.name.endswith(".csv"):
-                df = pd.read_csv(uploaded_file, sep=delimiter, engine='python')
+                df = pd.read_csv(uploaded_file, sep=";")
             else:
                 df = pd.read_excel(uploaded_file)
-            st.write("File uploaded:", uploaded_file.name)
-            df = df.dropna()
         except Exception as e:
             st.error(
                 f"Error: Unable to read the file. Please make sure it's a valid Excel or CSV file. Exception: {e}"
@@ -228,7 +221,7 @@ def optimasi_func():
         options = df.columns
         # Elemen input ditempatkan di kolom pertama ()
         input_nfeatures = st.number_input(
-            "Masukkan jumlah feature pada dataset yang akan dilakukan learning: ", 0, key= "key1"
+            "Masukkan jumlah feature pada dataset yang akan dilakukan learning: ", 0
         )
 
         # List untuk menyimpan fitur
@@ -236,12 +229,12 @@ def optimasi_func():
 
         # Tambahkan teks input ke dalam list sesuai dengan input_nfeatures
         for i in range(input_nfeatures):
-            selected_option = st.selectbox(f"Feature {i+1}:", options,key = "key2")
+            selected_option = st.selectbox(f"Feature {i+1}:", options)
             features_input.append(selected_option)
 
         feature_output = st.selectbox(
             "Masukkan feature output pada dataset yang akan dilakukan learning :",
-            options, key = "key3"
+            options,
         )
 
         st.write("Masukkan nilai range jumlah neurons yang akan dilakukan optimasi:")
@@ -251,11 +244,11 @@ def optimasi_func():
 
         # Elemen input min n_neuron
         with col1:
-            min_Nneurons = st.number_input("Range minimal jumlah neurons:", 0, key = "key4")
+            min_Nneurons = st.number_input("Range minimal jumlah neurons:", 0)
 
         # Elemen input max n_neuron
         with col2:
-            max_Nneurons = st.number_input("Range maksimal jumlah neurons:", 0,key = "key5")
+            max_Nneurons = st.number_input("Range maksimal jumlah neurons:", 0)
 
         # Input nilai aktivasi yang akan digunakan
         activations = []
@@ -270,12 +263,12 @@ def optimasi_func():
             "exponential",
         ]
         input_activations = st.number_input(
-            "Masukkan jumlah fungsi aktivasi yang akan dilakukan optimasi: ", 0,key = "key6"
+            "Masukkan jumlah fungsi aktivasi yang akan dilakukan optimasi: ", 0
         )
         # Tambahkan teks input ke dalam list sesuai dengan input_nfeatures
         for i in range(input_activations):
             selected_activation = st.selectbox(
-                f"Fungsi aktivasi {i+1}:", option_activations,key = "key7"
+                f"Fungsi aktivasi {i+1}:", option_activations
             )
             activations.append(selected_activation)
 
@@ -292,10 +285,10 @@ def optimasi_func():
             "Ftrl",
         ]
         input_optimizers = st.number_input(
-            "Masukkan jumlah optimizer yang akan dilakukan optimasi: ", 0,key = "key8"
+            "Masukkan jumlah optimizer yang akan dilakukan optimasi: ", 0
         )
         for i in range(input_optimizers):
-            selected_optimizers = st.selectbox(f"Optimizer {i+1}:", option_optimizers,key = "key9")
+            selected_optimizers = st.selectbox(f"Optimizer {i+1}:", option_optimizers)
             optimizers.append(selected_optimizers)
 
         # Input range learning rate
@@ -306,11 +299,11 @@ def optimasi_func():
 
         # Elemen input min_learningRate
         with col1:
-            min_learningRate = st.number_input("Range minimal learning rate:",key = "key10")
+            min_learningRate = st.number_input("Range minimal learning rate:")
 
         # Elemen input max n_neuron
         with col2:
-            max_learningRate = st.number_input("Range maksimal learning rate:",key = "key11")
+            max_learningRate = st.number_input("Range maksimal learning rate:")
 
         # Input range batch size
         st.write("Masukkan nilai range batch size yang akan dilakukan optimasi:")
@@ -320,11 +313,11 @@ def optimasi_func():
 
         # Elemen input min_batchSize
         with col1:
-            min_batchSize = st.number_input("Range minimal batch size:", 0,key = "key12")
+            min_batchSize = st.number_input("Range minimal batch size:", 0)
 
         # Elemen input max_batchSize
         with col2:
-            max_batchSize = st.number_input("Range maksimal batch size:", 0,key = "key13")
+            max_batchSize = st.number_input("Range maksimal batch size:", 0)
 
         # Input range jumlah epochs
         st.write("Masukkan nilai range jumlah epochs yang akan dilakukan optimasi:")
@@ -334,11 +327,11 @@ def optimasi_func():
 
         # Elemen input min_nEpochs
         with col1:
-            min_nEpochs = st.number_input("Range minimal jumlah epochs:", 0,key = "key14")
+            min_nEpochs = st.number_input("Range minimal jumlah epochs:", 0)
 
         # Elemen input max_nEpochs
         with col2:
-            max_nEpochs = st.number_input("Range maksimal jumlah epochs:", 0,key = "key15")
+            max_nEpochs = st.number_input("Range maksimal jumlah epochs:", 0)
 
         # Input range jumlah epochs
         st.write("Masukkan nilai range jumlah layers yang akan dilakukan optimasi:")
@@ -348,11 +341,11 @@ def optimasi_func():
 
         # Elemen input min_nLayers
         with col1:
-            min_nLayers = st.number_input("Range minimal jumlah layers:", 0,key = "key16")
+            min_nLayers = st.number_input("Range minimal jumlah layers:", 0)
 
         # Elemen input max_nLayers
         with col2:
-            max_nLayers = st.number_input("Range maksimal jumlah layers:", 0,key = "key17")
+            max_nLayers = st.number_input("Range maksimal jumlah layers:", 0)
 
         # Input range dropout rate
         st.write("Masukkan nilai range dropout rate yang akan dilakukan optimasi:")
@@ -362,13 +355,13 @@ def optimasi_func():
 
         # Elemen input min_dropout
         with col1:
-            min_dropout = st.number_input("Range minimal dropout rate:",key = "key18")
+            min_dropout = st.number_input("Range minimal dropout rate:")
 
         # Elemen input max_dropout
         with col2:
-            max_dropout = st.number_input("Range maksimal dropout rate:",key = "key19")
+            max_dropout = st.number_input("Range maksimal dropout rate:")
 
-        testSize = st.number_input("Masukkan test size : ",key = "key20")
+        testSize = st.number_input("Masukkan test size : ")
 
         # Dict input hyperparameter
         hyperparams = {
@@ -384,7 +377,7 @@ def optimasi_func():
 
         inputs_opt_act = [activations, optimizers]
 
-        if st.button("Next",key = "key21"):
+        if st.button("Next"):
             X = df[features_input]
             y = np.array(df[feature_output])
             y = np.reshape(y, (-1, 1))

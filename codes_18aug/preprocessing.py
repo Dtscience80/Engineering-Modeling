@@ -11,18 +11,18 @@ import numpy as np
 def preprocessing():
     # File uploader
     st.markdown(' ##### Pilih Delimiter (separator) file yang dipakai ! ')
-    delimiter = st.selectbox('Tentukan Delimiter file tabel anda !', (';', ',', ':', '.', '/', '|', '+'))
+    delimiter = st.selectbox('Tentukan Delimiter file tabel anda !', (',', ';', ':', '.', '/', '|', '+'), key = "delimitpre")
     st.write('Delimiter file tabel anda \'', delimiter + '\'')
     
     file_pro = st.file_uploader(
-        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"]
+        "Upload data dalam format xlsx/xls/csv", type=["xlsx", "xls", "csv"], key ="uploadpre"
     )
-    display_button = st.button("Display Dataset")
+    display_button = st.button("Display Dataset", key = "Disp_df")
 
     if file_pro is not None:
         try:
             if file_pro.name.endswith(".csv"):
-                df = pd.read_csv(file, sep=delimiter, engine='python')
+                df = pd.read_csv(file_pro, sep=delimiter, engine='python')
             else:
                 df = pd.read_excel(file_pro)
             st.write("File uploaded:", file_pro.name)
@@ -81,7 +81,7 @@ def preprocessing():
 
                 # Tambahkan teks input ke dalam list sesuai dengan input_nfeatures
                 for i in range(nfeatures):
-                    selected_option = st.selectbox(f"Feature {i+1}:", options)
+                    selected_option = st.selectbox(f"Feature {i+1}:", options, key ="sel_opti")
                     features.append(selected_option)
 
                 df = df[features]
@@ -108,7 +108,7 @@ def preprocessing():
 
             df = df.dropna()
             options = df.columns
-            output = st.selectbox("Masukkan feature y (target) : ", options)
+            output = st.selectbox("Masukkan feature y (target) : ", options, key = "sel_out")
 
             y = df[output]
             X = df.drop(columns=[output])  # Drop the 'output' column from X
@@ -155,7 +155,7 @@ def preprocessing():
             st.subheader("NORMALISASI DATA")
 
             opsi_norm = ["Semua feature", "Feature pilihan"]
-            norm_opsi = st.radio("Normalisasi akan dilakukan pada : ", opsi_norm)
+            norm_opsi = st.radio("Normalisasi akan dilakukan pada : ", opsi_norm, key="opt_norm")
 
             options = df.columns
 
@@ -169,7 +169,7 @@ def preprocessing():
 
                 # Tambahkan teks input ke dalam list sesuai dengan input_nfeatures
                 for i in range(nfeatures):
-                    selected_option = st.selectbox(f"Feature {i+1}:", options)
+                    selected_option = st.selectbox(f"Feature {i+1}:", options, key="sel_opt")
                     features_normalized.append(selected_option)
 
                 if nfeatures != 0:
