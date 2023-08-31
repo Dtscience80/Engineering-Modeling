@@ -9,3 +9,4 @@ tensorflow-addons
 bayesian-optimization
 scikeras
 scikit-optimize
+tkinter
