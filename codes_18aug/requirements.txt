@@ -2,6 +2,7 @@ streamlit
 streamlit-option-menu
 scikit-learn
 keras-models
+tkinter
 pandas
 tensorflow
 matplotlib
@@ -9,4 +10,4 @@ tensorflow-addons
 bayesian-optimization
 scikeras
 scikit-optimize
-tkinter
+
